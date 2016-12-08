@@ -41,3 +41,31 @@ app.post('/cheese', (req, res) => {
       });
     });
 });
+
+app.put('/cheese/:id', (req, res) => {
+  let id = req.params.id;
+  let edit = req.body;
+  knex('cheese')
+    .where('id', id)
+    .update(edit)
+    .returning('id', 'name', 'age', 'region')
+    .then((result) => {
+      res.json({
+        message: 'Record Updated!',
+        record: result[0]
+      });
+    });
+});
+
+app.delete('/cheese/:id', (req, res) => {
+  let id = req.params.id;
+  knex('cheese')
+    .where('id', id)
+    .del()
+    .then((result) => {
+      res.json({
+        message: 'Row deleted!',
+        record: id
+      });
+    });
+});
